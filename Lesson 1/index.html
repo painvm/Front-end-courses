@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 1</title>
+</head>
+<body>
+<script>
+
+
+    var link = "official_exchange_rates.xml";
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', link, false);
+    xmlhttp.send();
+    var xmlDoc = xmlhttp.responseXML;
+    document.write('<table>'+'<tr>'+'<th>Currency<\/th>'+'<th>Code<\/th>'+'<th>Abbr<\/th>'+'<th>Rates<\/th>'+'<\/tr>');
+    for(var i=0; i<xmlDoc.getElementsByTagName('CharCode').length; i++) {
+
+        document.write('<tr>'+'<td>'+xmlDoc.getElementsByTagName('Name')[i].childNodes[0].nodeValue+'<\/td>' +'<td>'+xmlDoc.getElementsByTagName('NumCode')[i].childNodes[0].nodeValue+'<\/td>'+'<td>'+xmlDoc.getElementsByTagName('CharCode')[i].childNodes[0].nodeValue+'<\/td>'+'<td>'+xmlDoc.getElementsByTagName('Value')[i].childNodes[0].nodeValue+'<\/td>' +'<\/tr>' );
+    }
+    document.write('</table>'+'<br>');
+</script>
+</body>
+</html>
