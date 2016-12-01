@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 1</title>
+</head>
+<body>
+<script>
+
+    var currentDateReal = new Date(); // object for using the current date
+    var year=1994; // value for iteration
+function valReq(day) { //function that parses XML which was actual for the given year with current date
+    
+
+var currentDate = new Date(day, currentDateReal.getMonth(), currentDateReal.getDate());
+    var DDMMYYYY = (currentDate.getDate()<10 ? '0'+currentDate.getDate() : currentDate.getDate())+'.'+(currentDate.getMonth()<10 ? '0'+currentDate.getMonth() : currentDate.getMonth())+'.'+currentDate.getFullYear();//date format compatible for our url
+
+var link = "https://bnm.md/en/official_exchange_rates?get_xml=1&date="+DDMMYYYY; // url
+ var xmlhttp = new XMLHttpRequest();
+xmlhttp.open('GET', link, false);
+    xmlhttp.send();
+    var xmlDoc = xmlhttp.responseXML;
+document.write(DDMMYYYY+'<br>'+'<table>'+'<tr>'+'<th>Currency</th>'+'<th>Code</th>'+'<th>Abbr</th>'+'<th>Rates</th>'+'</tr>'); //marking a table
+for(var i=0; i<xmlDoc.getElementsByTagName('CharCode').length; i++) {// printing all the data which was actual for the date written at the previous line
+
+    document.write('<tr>'+'<td>'+xmlDoc.getElementsByTagName('Name')[i].childNodes[0].nodeValue+'</td>' +'<td>'+xmlDoc.getElementsByTagName('NumCode')[i].childNodes[0].nodeValue+'</td>'+'<td>'+xmlDoc.getElementsByTagName('CharCode')[i].childNodes[0].nodeValue+'</td>'+'<td>'+xmlDoc.getElementsByTagName('Value')[i].childNodes[0].nodeValue+'</td>' +'</tr>' );
+
+}
+document.write('</table>'+'<br>');
+
+}
+    while (year <= currentDateReal.getFullYear()) { //calling the function for all the years since 1994
+        valReq(year);
+        year++;
+    }
+
+
+
+</script>
+</body>
+</html>

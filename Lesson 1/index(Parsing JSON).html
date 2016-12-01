@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 1</title>
+</head>
+<body>
+<script>
+
+
+var link = "package.json";
+  var xmlhttp = new XMLHttpRequest();
+xmlhttp.open('GET', link, false);
+    xmlhttp.send();
+    var xmlDoc = xmlhttp.responseText;
+var obj = JSON.parse(xmlDoc);
+document.write('<table>'+'<tr>'+'<th>Currency</th>'+'<th>Code</th>'+'<th>Abbr</th>'+'<th>Rates</th>'+'</tr>');
+for(var i=0; i<obj.Valute.length; i++) {
+
+    document.write('<tr>'+'<td>'+obj.Valute[i].Name+'</td>' +'<td>'+obj.Valute[i].NumCode+'</td>'+'<td>'+obj.Valute[i].CharCode+'</td>'+'<td>'+obj.Valute[i].Value+'</td>' +'</tr>' );
+
+}
+document.write('</table>'+'<br>');
+</script>
+</body>
+</html>

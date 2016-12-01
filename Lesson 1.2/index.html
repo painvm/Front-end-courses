@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Handlebars.js</title>
+    <script src="handlebars-v4.0.5.js"></script>
+</head>
+
+<body>
+<div id="show-us-the-truth"></div><!--div that will contain our data-->
+<script id="quote-template" type="text/x-handlebars-template"><!--template for the data-->
+
+    {{#each ValSinceTenDays}} {{Date}}<!--we work with each of the object from array ValSinceTenDays that contains the data for some concrete days and now try to print the values of all the attributes that contain a date-->
+    <br>
+    <br>
+    <br>
+    <table border="1"><!--then each of the objects will be shown as a table-->
+        <tr>
+            <th>Currency</th>
+            <th>Code</th>
+            <th>Abbr</th>
+            <th>Rates</th>
+        </tr>
+        {{#each Valute}} <!--and we subline that the following columns take values from each object Valute-->
+
+
+        <tr>
+            <td>{{Name}}</td>
+            <td>{{NumCode}}</td>
+            <td>{{CharCode}}</td>
+            <td>{{Value}}</td>
+        </tr>
+        {{/each}}
+    </table>
+    <br>
+    <br>
+    <br> {{/each}}
+
+
+</script>
+<script>
+    var valInfo = document.getElementById("quote-template").innerHTML;//well, we set this variable for the next compiling
+    var template = Handlebars.compile(valInfo);//you see
+    var link = "package.json";//parsing JSON file
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', link, false);
+    xmlhttp.send();
+    var xmlDoc = xmlhttp.responseText;
+    var obj = JSON.parse(xmlDoc);
+    var valData = template(obj);//yes, we work with this data !
+    document.getElementById("show-us-the-truth").innerHTML = valData; //so, we did it !
+</script>
+</body>
+
+</html>
