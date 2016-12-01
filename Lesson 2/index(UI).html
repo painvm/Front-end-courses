@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuadRes</title>
+    <script src="Chart.js"></script>
+    <script src="jedi.js"></script>
+    <link href="dist/toolkit.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Pontano+Sans|Indie+Flower" rel="stylesheet">
+</head>
+<body>
+<div class="grid">
+    <div class="col span-12 header">QUADRES</div>
+    <div class="col span-4"></div>
+    <div class="col span-4 headexp">A huge system for solving quadratic equations</div>
+    <div class="col span-4"></div>
+    <div class="col span-12 instruction">Write here your coefficients</div>
+    <div class="col span-12 values">
+        <form name="coefficients" method="get"><input type="text" name="a" class="input small">x<sup>2</sup> + <input type="text"
+                                                                                                         name="b"
+                                                                                                         class="input small">x
+            + <input type="text" name="c" class="input small"> = <input type="text" name="rightside"
+                                                                        class="input small">
+            <button type="submit" class="button is-success" onclick="QuadraticEquation(); return false;">Solve</button>
+        </form>
+    </div>
+    <div class="col span-12 solution ">
+        <div class="col span-4" id="answer"></div>
+        <div class="col span-4" id="answer2"></div>
+        <div class="col span-4" id="answer3"></div>
+        <div class="col span-4"></div>
+        <div class="col span-4">  <canvas id="scatterChart" width="50" height="50"></canvas></div>
+        <div class="col span-4"></div>
+
+    </div>
+
+</div>
+
+
+
+</body>
+</html>
