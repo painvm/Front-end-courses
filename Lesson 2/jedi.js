@@ -1,177 +1,131 @@
-function QuadraticEquation() {
-    var a = 1, b = 1, c = 0, rightside = 0;
+function Equation() {
     var form = document.forms.coefficients;
-    var template = /\s*?-\s*?/;
-    if (form.elements.a.value != form.elements.a.value.match(template) && form.elements.a.value != '') {
-        a = form.elements.a.value;
+    var template_for_searching = /\s*-?\s*\d*\s*\.?\s*\d*/;
+    var template_for_definition_of_negative_number = /\s*-\s*(?!=\d+)/;
+    var template_for_definition_of_one = /\s*?/;
+
+    var a_general = form.elements.a.value.toString().match(template_for_searching).toString().replace(/\s+/g, "");
+    var b_general = form.elements.b.value.toString().match(template_for_searching).toString().replace(/\s+/g, "");
+    var c_general = form.elements.c.value.toString().match(template_for_searching).toString().replace(/\s+/g, "");
+    var rs_general = form.elements.rs.value.toString().match(template_for_searching).toString().replace(/\s+/g, "");
+
+
+
+    function toNumber(value) {
+        return value == value.toString().match(template_for_definition_of_negative_number) ? -1 : (value == value.toString().match(template_for_definition_of_one) ? 1 : +value);
     }
-    else if (form.elements.a.value == form.elements.a.value.match(template) && form.elements.a.value != 0) {
-        a = -1
+    var a_number = toNumber(a_general),
+        b_number = toNumber(b_general),
+        c_number = +c_general,
+        rs_number = +rs_general;
+
+    a_general = (a_general == a_general.match(/^\s*1(?!=\w*)/) ? "" : (a_general == a_general.match(/^\s*-\s*1(?!=\w*)/) ? "-" : a_general));
+    b_general = (b_general == b_general.match(/^\s*1(?!=\w*)/) ? "" : (b_general == b_general.match(/^\s*-\s*1(?!=\w*)/) ? "-" : b_general));
+    if (a_number == 0) {
+        LinearEquation();
+    } else {
+        QuadraticEquation()
     }
 
-    if (form.elements.b.value != form.elements.b.value.match(template) && form.elements.b.value != '') {
-        b = form.elements.b.value;
-    }
-    else if (form.elements.b.value == form.elements.b.value.match(template)) {
-        b = -1
-    }
-
-    if (form.elements.c.value != form.elements.c.value.match(template) && form.elements.c.value != '') {
-        c = form.elements.c.value;
-    }
-    if (form.elements.rightside.value != form.elements.rightside.value.match(template) && form.elements.rightside.value != '') {
-        rightside = form.elements.rightside.value;
-    }
-    a = (form.elements.a.value.match(/0/) == a  ? 0 : (a == 0 ? 1 : a));
-    b = (form.elements.b.value.match(/0/) == b  ? 0 : (b == 0 ? 1 : b));
-    +a;
-    +b;
-    +c;
-    +rightside;
-
-    var solution_explain = null;
-    var visibleCoefficients = {
-        a: a == 0 ? '' : (a > 1 ? a : (a == 1 ? '' : (a < -1 ? a : "-"))),
-        b: b == 0 ? '' :(b > 1 ? ' + ' + b : (b == 1 ? ' + ' : (b < -1 ? ' - ' + Math.abs(b) : " - "))),
-        c:(c >= 1 ? ' + ' + c : (c == 0 ? '' : ' - ' + Math.abs(c)))
-    }
-
-    var equationInput = ((a =='' && a == 0 ? '' : visibleCoefficients.a + "x" + "<sup>2<\/sup>") + (a == 0 && b > 0 ? visibleCoefficients.b.replace(/\s\+\s/, "") : visibleCoefficients.b ) + "x" + visibleCoefficients.c + ' = ' + rightside + (rightside != 0 ? "<br><br><span class='text-info'>Let's transform the equation<\/span><br><br>" + (a =='' && a == 0 ? '' : visibleCoefficients.a + "x" + "<sup>2<\/sup>") +  (a == 0 && b > 0 ? visibleCoefficients.b.replace(/\s\+\s/, "") : visibleCoefficients.b ) + "x" + ((c - rightside) > 0 ? ' + ' + (c - rightside) : ((c - rightside) == 0 ? '' : " - " + Math.abs((c - rightside)))) + " = 0" : ''));
-    document.getElementById("answer").innerHTML = equationInput;
-    c -= rightside;
-    var discriminant_value = (Math.pow(b, 2) - 4 * a * c);
-    var discriminant =  (c != 0 ? "<span class='text-info'>Then we must calculate discriminant<\/span><br><br>"+"&#916 = "+Math.pow(b, 2) + (a * c > 0 ? " - " : " + ") + "4*" + Math.abs(a) + "*" +  Math.abs(c) + " = " +  (Math.pow(b, 2) - 4 * a * c):"<br><span class='text-info'>Break out x<\/span><br><br>"+"x("+visibleCoefficients.a+"x"+(b >=1 ? " + " : " - ")+Math.abs(b)+") = 0");
-
-    document.getElementById("answer2").innerHTML = discriminant;
-    if (a == 0) {
-       LinearEquation();
-    }
-    else if (c == 0) {
-        solution_explain = "<br><span class='text-info'>Each of the sides is equal to zero. Here's the answer<\/span><br><br>"+"x<sub>1<\/sub>"+" = 0"+"<br>"+"x<sub>2<\/sub>"+" = " + -b/a;
-        document.getElementById("answer3").innerHTML = solution_explain;
-    }
-    else if (discriminant_value > 0) {
-        solution_explain = "<br><span class='text-info'>Finding the roots<\/span><br><br>"+"x<sub>1,2<\/sub>"+ " = (" + (b > 0 ? "-"+b : Math.abs(b)) + " &#247 " + (2*a) + ") &#177 &#8730;("+(Math.pow(b, 2) - 4 * a * c)+")"+" &#247 "+2*a + "<br><br><span class='text-info'>Here's the answer<\/span><br><br>"+"x"+"<sub>1<\/sub>"+" = "+((-b + Math.sqrt(discriminant_value)) / (2 * a)).toPrecision(3)+"<br>"+"x"+"<sub>2<\/sub>"+" = "+((-b - Math.sqrt(discriminant_value)) / (2 * a)).toPrecision(3)+"<br>";
-        document.getElementById("answer3").innerHTML = solution_explain;
-    }
-    else if (discriminant_value == 0) {
-        solution_explain = "<span class='text-info'>There is the only one root<\/span><br><br>"+ "x = "+(b > 0 ? "-"+b : Math.abs(b)) +" &#247 "+ (2*a) + " = " + (-b/2*a);
-        document.getElementById("answer3").innerHTML = solution_explain;
-    }
-    else if (discriminant_value < 0) {
-        solution_explain = "<span class='text-error'>There are the only complex roots. If it is useful for you...<\/span><br><br><span class='text-info'>Finding the complex roots<\/span><br><br>"+"x<sub>1,2<\/sub>"+ " = (" + (b > 0 ? "-"+b : Math.abs(b)) + " &#247 " + (2*a) + ") &#177 &#8730;("+(Math.pow(b, 2) - 4 * a * c)+")"+" &#247 "+2*a + " = (" + (b > 0 ? "-"+b : Math.abs(b)) + " &#247 " + (2*a) + ") &#177 i&#8730;("+(Math.abs(discriminant_value))+")"+" &#247 "+2*a+"<br><br><span class='text-info'>Here's the answer<\/span><br><br>"+"x"+"<sub>1<\/sub>"+" = "+((-b/(2*a))+" - "+Math.sqrt(Math.abs(discriminant_value))/(2*a)+"i")+"<br>"+"x"+"<sub>2<\/sub>"+" = "+((-b/(2*a))+" + "+Math.sqrt(Math.abs(discriminant_value))/(2*a)+"i")+"<br>";
-        document.getElementById("answer3").innerHTML = solution_explain;
-    }
-    function equationForPlot(arg) {
-        return a*Math.pow(arg,2)+b*arg+c;
-    }
     function LinearEquation() {
-        visibleCoefficients.b = (b > 0 ? visibleCoefficients.b.replace(/\s\+\s/, "") : visibleCoefficients.b );
-        var linear_form = "<span class='text-warning'>Oh. Looks like a linear equation. For easier solving let\'s present it like <b>bx = c</b></span><br><br>"+visibleCoefficients.b+"x = "+(-c);
-        document.getElementById("answer2").innerHTML = linear_form;
-        solution_explain = "<span class='text-info'>There is the only one root<\/span><br><br>"+ "x = "+(-c) + " &#247 "+ b + " = " + (-c/b);
-        document.getElementById("answer3").innerHTML = solution_explain;
-        document.getElementById("answer3").style.marginBottom = "5%";
-    }
-    var ctx = document.getElementById("scatterChart");
-    var scatterChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: "equation",
-                fill: false,
-                data: [{
-                    x: -10,
-                    y: equationForPlot(-10)}, {
-                    x: -9,
-                    y: equationForPlot(-9)
-                }, {
-                    x: -8,
-                    y: equationForPlot(-8)
-                } ,
-                    {
-                        x: -7,
-                        y: equationForPlot(-7)
-                    } ,
-                    {
-                        x: -6,
-                        y: equationForPlot(-6)
-                    } ,
-                    {
-                        x: -5,
-                        y: equationForPlot(-5)
-                    } ,
-                    {
-                        x: -4,
-                        y: equationForPlot(-4)
-                    } ,
-                    {
-                        x: -3,
-                        y: equationForPlot(-3)
-                    } ,
-                    {
-                        x: -2,
-                        y: equationForPlot(-2)
-                    } ,
-                    {
-                        x: -1,
-                        y: equationForPlot(-1)
-                    } ,
-                    {
-                        x: 0,
-                        y: equationForPlot(0)
-                    } ,
-                    {
-                        x: 1,
-                        y: equationForPlot(1)
-                    },
-                    {
-                        x: 2,
-                        y: equationForPlot(2)
-                    } ,
-                    {
-                        x: 3,
-                        y: equationForPlot(3)
-                    } ,
-                    {
-                        x: 4,
-                        y: equationForPlot(4)
-                    } ,
-                    {
-                        x: 5,
-                        y: equationForPlot(5)
-                    } ,
-                    {
-                        x: 6,
-                        y: equationForPlot(6)
-                    } ,
-                    {
-                        x: 7,
-                        y: equationForPlot(7)
-                    } ,
-                    {
-                        x: 8,
-                        y: equationForPlot(8)
-                    } ,
-                    {
-                        x: 9,
-                        y: equationForPlot(9)
-                    },
-                    {
-                        x: 10,
-                        y: equationForPlot(10)}
-                ]
-            }]
-        },
-        options: {
-            scales: {
-                xAxes: [{
-                    type: 'linear',
-                    position: 'bottom'
-                }]
-            }
+        var visualRepresentation = b_general + "x" + (c_number > 0 ? "+" : "") + (c_number != 0 ? c_number : "") + "=" + rs_number;
+
+        visualRepresentation += rs_number == 0 ? "" : "<br><br><span class='text-info'>Let's transform the equation<\/span><br><br>" + b_general + "x" + ((c_number - rs_number) > 0 ? "+" : "") + (c_number - rs_number) + "=0";
+        document.getElementById("answer").innerHTML = visualRepresentation;
+        c_number -= rs_number;
+        var visualRepresentation2 = "<span class='text-warning'>Oh. Looks like a linear equation. For easier solving let\'s present it like <b>bx = c</b></span><br><br>" + b_general + "x=" + (-c_number);
+        document.getElementById("answer2").innerHTML = visualRepresentation2;
+        var answer = null;
+        if (b_number == 0 && c_number == 0) {
+            var answer = "<span class='text-info'>This equation has an infinite count of roots</span><br><br>x &#8712; R";
+            document.getElementById("answer3").innerHTML = answer;
+        } else if (b_number == 0 && c_number != 0) {
+            answer = "<span class='text-info'>This equation has no roots</span>";
+            document.getElementById("answer3").innerHTML = answer;
+        } else {
+            answer = "<span class='text-info'>There is the only one root<\/span><br><br>" + "x = " + (-c_number) + " &#247 " + b_number + " = " + -(c_number / b_number);
+            document.getElementById("answer3").innerHTML = answer;
+            document.getElementById("answer3").style.marginBottom = "5%";
+            Plot(a_number, b_number, -c_number);
         }
-    });
+    }
 
+
+    function QuadraticEquation() {
+        function twoRealRoots(a, c) {
+            return "<span class='text-info'>Here's the answer</span><br><br>x<sub>1</sub> = " + "&#8730; " + "(" + (c + " &#247 " + a) + ") = " + Math.sqrt(c / a) + "<br>" + "x<sub>2</sub> = - " + "&#8730; " + "(" + (c + " &#247 " + a) + ") = " + -Math.sqrt(c / a);
+        }
+
+        function twoComplexRoots(a, c) {
+            return "<span class='text-info'>Here's the answer</span><br><br>x<sub>1</sub> = i" + "&#8730; " + "(" + (Math.abs(c) + " &#247 " + Math.abs(a)) + ") = " + Math.sqrt(Math.abs(c) / Math.abs(a)) + "i" + "<br>" + "x<sub>2</sub> = i" + "&#8730; " + "(" + (Math.abs(c) + " &#247 " + Math.abs(a)) + ") = " + -Math.sqrt(Math.abs(c) / Math.abs(a)) + "i"
+        }
+
+        function twoRealRootsForZero(a, b) {
+            return "<span class='text-info'>Each of the sides is equal to zero</span><br><br>x<sub>1</sub> = 0" + "<br>" + "x<sub>2</sub> = " + -(b / a);
+        }
+
+        function oneRoot(a, b) {
+            return "<span class='text-info'>There is the only one root</span><br><br>x = - (" + b + " &#177 " + "2*" + a + ") = " + -(b / (2 * a));
+        }
+
+        function twoComplexRootsForD(a, b, d) {
+            return "<span class='text-error'>There are the only complex roots. If it is useful for you...<\/span><br><br><span class='text-info'>Finding the complex roots</span><br><br>x<sub>1</sub> = - (" + b + " &#247 " + "2*" + a + ") + &#8730; (" + Math.abs(d) + "i<sup>2</sup>)" + " &#247 " + "2*" + a + " = " + -(b / (2 * a)) + " + " + Math.sqrt(Math.abs(d)) / (2 * a) + "i" + "<br>" + "x<sub>2</sub> = - (" + b + " &#247 " + "2*" + a + ") - &#8730; (" + Math.abs(d) + "i<sup>2</sup>)" + " &#247 " + "2*" + a + " = " + -(b_number / (2 * a_number)) + " - " + Math.sqrt(Math.abs(discriminant_value)) / (2 * a_number) + "i";
+        }
+
+        function twoRealRootsForD(a, b, d) {
+            return "<span class='text-info'>Here is the answer</span><br><br>x<sub>1</sub> = - (" + b + " &#247 " + "2*" + a + ") + &#8730; (" + d + ")" + " &#247 " + "2*" + a + " = " + (-b+Math.sqrt(d))/(2*a) + "<br>" +  "x<sub>2</sub> = - (" + b + " &#247 " + "2*" + a + ") - &#8730; (" + d + ")" + " &#247 " + "2*" + a + " = " + (-b-Math.sqrt(d))/(2*a);
+        }
+        b_general = b_number > 0 ? "+" + b_general : (b_general == 0 ? "" : b_general);
+        c_general = c_number > 0 ? "+" + c_general : c_general;
+        var visualRepresentation = a_general + "x" + "<sup>2</sup>" + b_general + (b_general == 0 ? "" : "x") + (c_number != 0 ? c_general : "") + "=" + rs_number;
+        visualRepresentation += rs_number == 0 ? "" : "<br><br><span class='text-info'>Let's transform the equation<\/span><br><br>" + a_general + "x" + "<sup>2</sup>" + b_general + (b_general == 0 ? "" : "x") + ((c_number - rs_number) > 0 ? "+" + (c_number - rs_number) : ((c_number - rs_number) == 0 ? "" : (c_number - rs_number))) + "=0";
+        document.getElementById("answer").innerHTML = visualRepresentation;
+        c_number -= rs_number;
+        var answer = null;
+        var discriminant_value = (Math.pow(b_number, 2) - 4 * a_number * c_number);
+        var visibleRepresentation2 = null;
+        if (b_general == 0) {
+            c_number = c_number * (-1);
+            visibleRepresentation2 = "<span class='text-info'>It's very simple example of quadratic equation.</span><br><br>" + a_general + "x<sup>2</sup>=" + c_number;
+            document.getElementById("answer2").innerHTML = visibleRepresentation2;
+            if (c_number / a_number >= 0) {
+                answer = twoRealRoots(a_number, c_number);
+                document.getElementById("answer3").innerHTML = answer;
+                document.getElementById("answer3").style.marginBottom = "5%";
+                Plot(a_number, b_number, c_number);
+            } else {
+                answer = twoComplexRoots(a_number, c_number);
+                document.getElementById("answer3").innerHTML = answer;
+                document.getElementById("answer3").style.marginBottom = "5%";
+                Plot(a_number, b_number, c_number);
+            }
+        } else if (c_number == 0) {
+            visibleRepresentation2 = "<span class='text-info'>First of all we can break out x</span><br><br>" + "x(" + a_general + "x" + (b_number > 0 ? "+" + b_number : b_number) + ")=0"; //pay attention
+            document.getElementById("answer2").innerHTML = visibleRepresentation2;
+            answer = twoRealRootsForZero(a_number, b_number);
+            document.getElementById("answer3").innerHTML = answer;
+            document.getElementById("answer3").style.marginBottom = "5%";
+            Plot(a_number, b_number, c_number);
+        } else {
+            visibleRepresentation2 = "<span class='text-info'>Finding the discriminant</span><br><br>" + "&#916=" + "b<sup>2</sup>-4ac=" + Math.pow(b_number, 2) + (a_number * c_number > 0 ? "-" : "+") + 4 * Math.abs(a_number * c_number) + "=" + discriminant_value;
+            document.getElementById("answer2").innerHTML = visibleRepresentation2;
+            if (discriminant_value == 0) {
+                answer = oneRoot(a_number, b_number);
+                document.getElementById("answer3").innerHTML = answer;
+                document.getElementById("answer3").style.marginBottom = "5%";
+                Plot(a_number, b_number, c_number);
+            } else if (discriminant_value < 0) {
+                answer = twoComplexRootsForD(a_number, b_number, discriminant_value);
+                document.getElementById("answer3").innerHTML = answer;
+                document.getElementById("answer3").style.marginBottom = "5%";
+                Plot(a_number, b_number, c_number);
+            } else {
+                answer = twoRealRootsForD(a_number, b_number, discriminant_value);
+                document.getElementById("answer3").innerHTML = answer;
+                document.getElementById("answer3").style.marginBottom = "5%";
+                Plot(a_number, b_number, c_number);
+            }
+
+        }
+    }
 }
-

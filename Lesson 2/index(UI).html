@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>QuadRes</title>
     <script src="Chart.js"></script>
+    <script src="plot.js"></script>
     <script src="jedi.js"></script>
+
+
     <link href="dist/toolkit.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Pontano+Sans|Indie+Flower" rel="stylesheet">
@@ -17,12 +20,12 @@
     <div class="col span-4"></div>
     <div class="col span-12 instruction">Write here your coefficients</div>
     <div class="col span-12 values">
-        <form name="coefficients" method="get"><input type="text" name="a" class="input small">x<sup>2</sup> + <input type="text"
+        <form name="coefficients" method="post"><input type="text" name="a" class="input small">x<sup>2</sup> + <input type="text"
                                                                                                          name="b"
                                                                                                          class="input small">x
-            + <input type="text" name="c" class="input small"> = <input type="text" name="rightside"
+            + <input type="text" name="c" class="input small"> = <input type="text" name="rs"
                                                                         class="input small">
-            <button type="submit" class="button is-success" onclick="QuadraticEquation(); return false;">Solve</button>
+            <button type="submit" class="button is-success"  onclick="Equation(); return false;">Solve</button>
         </form>
     </div>
     <div class="col span-12 solution ">
