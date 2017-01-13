@@ -1,0 +1,6 @@
+{
+  "name": "lesson_6_2",
+  "devDependencies": {
+    "selenium-webdriver": "3.0.1"
+  }
+}
