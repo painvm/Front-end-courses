@@ -1,0 +1,26 @@
+
+{{#each this}}
+    {{#if ValCurs}}
+    <p>{{#each ValCurs}}{{Date}}{{/each}}</p>
+    <table border="1" class="table-responsive text-center">
+
+        <tr>
+            <th>Currency</th>
+            <th>Code</th>
+            <th>Abbr</th>
+            <th>Rates</th>
+        </tr>
+
+        {{#each ValCurs.Valute}}
+
+            <tr>
+                <td>{{Name}}</td>
+                <td>{{NumCode}}</td>
+                <td>{{CharCode}}</td>
+                <td>{{Value}}</td>
+            </tr>
+        {{/each}}
+
+    </table>
+    {{/if}}
+{{/each}}
